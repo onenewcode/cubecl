@@ -284,6 +284,18 @@ impl Client {
         }
     }
 
+    /// The stream this client would use for an operation submitted now.
+    ///
+    /// A pinned client returns its pinned stream. An unpinned client resolves
+    /// [`StreamId::current`] when this method is called; a later operation may use a
+    /// different stream if the caller changes the active scope.
+    ///
+    /// This only reads the existing stream selection. It does not submit work,
+    /// wait for the server, allocate device memory, or change the client or scope.
+    pub fn execution_stream(&self) -> StreamId {
+        self.stream_id()
+    }
+
     /// The stream its launches go out on, on its device's service: what a
     /// [`StreamModeOverride`](crate::execution::StreamModeOverride) sets the
     /// mode of.
